@@ -1,8 +1,28 @@
 body{
     background-color: #151210;
     color: #eeeeee;
-    font-family: Arial, sans-serif;
+    /*font-family: Arial, sans-serif;*/
+    font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    display: flex;
+    min-height: 100vh;
+    overflow-y: scroll;
+    flex-direction: column;
+
+}
+.page-content{
+    max-width: 70rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin: auto;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.flex {
+    display: flex;
 }

@@ -1,32 +1,75 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
+.items-center {
     align-items: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.navbar {
     background-color: #151210;
-    padding: 1rem;
     border-bottom: 1px solid #4d4d4d;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    align-items: center;
   }
-  
-  .navbar ul {
+
+.navbar-content{
+    padding: .5rem 1rem;
+    max-width: 70rem;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.logo-container {
+    height: 4rem;
+    width: auto;
+    aspect-ratio: 1/1;
+
+}
+.logo {
+    /*position: absolute;*/
+    height: 4rem;
+    width: auto;
+    aspect-ratio: 1/1;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    color: transparent;
+}
+
+.profile {
+    align-items: center;
+}
+
+
+
+.navbar ul {
     list-style: none;
     display: flex;
     margin: 0;
-    padding: 0;
-  }
-  
-  .navbar li {
-    margin-right: 20px; /* Spacing between navbar items */
-  }
-  
-  .navbar li:last-child {
+}
+
+
+.navbar li {
+    margin-right: 5px; /* Spacing between navbar items */
+}
+
+.navbar li:last-child {
     margin-right: 0; /* Remove margin for the last item */
-  }
-  
-  .navbar button {
-    background-color: #007bff;
+}
+
+.navbar button {
+    background-color: #151210;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: .5rem;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -34,9 +77,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s;
-  }
-  
-  .navbar button:hover {
-    background-color: #0056b3; /* Darken the button slightly on hover */
-  }
+}
+
+.navbar button:hover {
+    background-color: #181818; /* Darken the button slightly on hover */
+}
   

@@ -15,10 +15,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* Ensure to include the <head> tags for proper document structure */}
+        <title>Master Lesesal</title>
       </head>
-      <body className={inter.className}>
+      <body className={inter.className + "items-center" }>
         <Navbar /> {/* This line includes the Navbar */}
-        {children}
+        <div className={"items-center"}>
+            <div className={"page-content "}>
+                {children}
+            </div>
+        </div>
       </body>
     </html>
   );
