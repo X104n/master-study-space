@@ -44,11 +44,10 @@
     color: transparent;
 }
 
-.profile {
-    align-items: center;
+.profile-icon {
+    height: 1.75rem;
+    width: 1.75rem;
 }
-
-
 
 .navbar ul {
     list-style: none;
