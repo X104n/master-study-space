@@ -2,9 +2,17 @@
 import "./temp.css"
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
+import {useState} from "react";
+
 
 export default function Navbar() {
     const router = useRouter();
+
+    const [showDropdown, setShowDropdown] = useState(false)
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown)
+    }
+
     return (
         <div className="navbar flex items-center">
             <div className="navbar-content flex items-center">
@@ -28,8 +36,11 @@ export default function Navbar() {
                     </ul>
                 </div>
 
-                <div className={"items-center"}>
-                    <button>
+                <div className={"items-center profile"}>
+                    {/*TODO: Add light/dark mode button*/}
+                    {/*TODO: Make this only a login button if nobody is logged in*/}
+                    {/*TODO: Make it so that when the dropdown menu is down, if you click anywhere that isn't the menu it closes*/}
+                    <button onClick={toggleDropdown}>
                         <svg stroke="currentColor" fill="none" strokeWidth="0" viewBox="0 0 15 15" className="profile-icon"
                              height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd"
@@ -37,6 +48,13 @@ export default function Navbar() {
                                   fill="currentColor"></path>
                         </svg>
                     </button>
+                    {showDropdown && (
+                        <div className={"dropdown-menu"}>
+                            <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
+                            <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
+                            <div><button className={"dropdown-menu-button"}>Logg ut</button></div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
