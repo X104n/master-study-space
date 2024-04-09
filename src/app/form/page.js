@@ -46,19 +46,7 @@ export default function StudyRoomForm() {
     }
   };
   
-  
-  /*
-  const handleAddData = async () => {
-    try {
-      const testRef = ref(db, 'test');
-      await set(testRef, { hello: "world" });
-      alert('Test data added successfully!');
-    } catch (error) {
-      console.error('Firebase Test Error:', error);
-      alert('Test error: ' + error.message);
-    }
-  };
-*/
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +58,7 @@ export default function StudyRoomForm() {
       // Assuming handleAddData is an async function that returns a promise
       await handleAddData(formData);
       console.log("Data successfully added");
-      // Here, you could also reset the form or provide a success message to the user
+
     } catch (error) {
       console.error("Error adding data: ", error);
       setSubmitError('Error adding data. Please try again.'); // Provide feedback to the user
