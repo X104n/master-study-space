@@ -1,7 +1,7 @@
 "use client"
 import { push, ref, set } from 'firebase/database';
 import React, { useState } from 'react';
-import { db } from './firebaseConfig'; 
+import { db } from '../config/firebaseConfig';
 import "./temp.css"
 
 export default function StudyRoomForm() {
