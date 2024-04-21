@@ -2,11 +2,13 @@
 import {useState} from 'react';
 import { auth } from '../config/firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from 'next/navigation';
 
 
 export default function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,6 +50,7 @@ export default function SignupPage() {
                 </div>
                 <button type="submit">Signup</button>
             </form>
+            <button onClick={() => router.push('/login')}>Login</button>
         </div>
     );
 }
