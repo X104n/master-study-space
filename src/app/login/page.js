@@ -1,7 +1,8 @@
 'use client'
 import {useState} from 'react';
-import { db } from '../config/firebaseConfig';
 import { useRouter } from 'next/navigation';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../config/firebaseConfig';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -10,7 +11,16 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let a = db;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            // User is signed in
+            console.log(`User signed in: ${userCredential.user}`);
+            router.push('/bruker'); // Redirect to user profile page
+        } catch (error) {
+            // There was an error signing in the user
+            console.error(`Error signing in user: ${error}`);
+        }
     };
 
     return (
