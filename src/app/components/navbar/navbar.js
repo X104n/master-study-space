@@ -2,7 +2,9 @@
 import "./temp.css"
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {onAuthStateChanged} from "firebase/auth";
+import {auth} from "@/app/config/firebaseConfig";
 
 
 export default function Navbar() {
@@ -11,6 +13,63 @@ export default function Navbar() {
     const [showDropdown, setShowDropdown] = useState(false)
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown)
+    }
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                // User is signed in
+                setUser(currentUser);
+                setLoading(false);
+            } else {
+                // No user is signed in
+                setUser(null);
+                setLoading(false);
+            }
+        });
+
+        // Cleanup subscription on unmount
+        return () => {
+            unsubscribe();
+        };
+    }, []); // Empty dependency array means this effect only runs once on mount
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if(user === null) {
+        return (
+            <div className="navbar flex items-center">
+                <div className="navbar-content flex items-center">
+                    <div className={"flex items-center "}>
+                        <div className={"logo-container"}>
+                            <a href="https://echo.uib.no/" target="_blank" rel="noopener noreferrer">
+                                {/*<img alt="Logo" src= className={"logo"}></img>*/}
+                                <Image
+                                    src = "/echo-logo.webp"    // public is next to src
+                                    alt = "Echo Hovedside"
+                                    width={64}
+                                    height={64}
+                                    className={"logo"}
+                                />
+                            </a>
+                        </div>
+                        <ul>
+                            <li><button onClick={() => router.push('/')}>Hjem</button></li>
+                            <li><button onClick={() => router.push('/map')}>Kart</button></li>
+                            <li><button onClick={() => router.push('/form')}>Søknad</button></li>
+                        </ul>
+                    </div>
+                    <div className={"items-center profile"}>
+                        <button onClick={() => router.push('/login')}>Logg inn</button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

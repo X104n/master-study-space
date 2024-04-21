@@ -5,7 +5,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 
 export default function SignupPage() {
-    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -27,16 +26,6 @@ export default function SignupPage() {
         <div>
             <h1>Signup</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                </div>
                 <div>
                     <label htmlFor="email">Email:</label>
                     <input
