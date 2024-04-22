@@ -1,0 +1,17 @@
+.map-button {
+    background-color: #151210;
+    text-align: left;
+    width:100%;
+    color:white;
+    border: 0;
+    font-size:16px;
+    padding:5px;
+    cursor: pointer;
+}
+
+.map-button:hover {
+    background-color: #181818; /* Darken the button slightly on hover */
+}
+.button-container{
+
+}
