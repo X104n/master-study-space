@@ -1,17 +1,42 @@
+/* Button Styles */
 .map-button {
     background-color: #151210;
     text-align: left;
-    width:100%;
-    color:white;
+    width: 100%;
+    color: white;
     border: 0;
-    font-size:16px;
-    padding:5px;
+    font-size: 16px;
+    padding: 5px;
     cursor: pointer;
 }
 
 .map-button:hover {
     background-color: #181818; /* Darken the button slightly on hover */
 }
-.button-container{
 
+/* Iframe and Image Container Styles */
+.container-centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Grid Container for Images */
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    margin: 20px auto; /* Centers the grid container and adds margin for spacing */
+}
+
+.grid-item {
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.grid-item img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
