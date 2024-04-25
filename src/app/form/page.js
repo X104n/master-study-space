@@ -3,6 +3,8 @@ import { push, ref, set } from 'firebase/database';
 import React, { useState } from 'react';
 import { db } from '../config/firebaseConfig';
 import "./temp.css"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 
 export default function StudyRoomForm() {
   // State to keep track of form inputs
@@ -13,6 +15,14 @@ export default function StudyRoomForm() {
     examinationDate: ''
   });
   
+
+    // State for registration
+    const [registrationData, setRegistrationData] = useState({
+      email: '',
+      password: ''
+    });
+
+
   // State to manage form submission status
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -26,39 +36,43 @@ export default function StudyRoomForm() {
     }));
   };
 
+    // Function to handle input changes for the registration form
+    const handleRegistrationChange = (e) => {
+      const { name, value } = e.target;
+      setRegistrationData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    };
+
   // Function to handle form data submission
-  
   const handleAddData = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      alert('Please log in to submit the form.');
+      return;
+    }
+  
     try {
-      console.log("Attempting to add data...", formData); // Debugging log
-      const usersRef = ref(db, 'users');
-      const newDataRef = push(usersRef);
-      await set(newDataRef, formData);
-      console.log("Data added successfully!"); // Success log
+      const formsRef = ref(db, 'forms');
+      const newFormRef = push(formsRef);
+      await set(newFormRef, {
+        ...formData,
+        userId: user.uid  // Link the form to the user's UID
+      });
+      console.log("Data added successfully!");
       alert('Data added successfully!');
-      setFormData({ name: '', studentNumber: '', studyRoom: '' }); // Reset form
+      setFormData({ name: '', studentNumber: '', studyRoom: '', examinationDate: '' }); // Reset form
     } catch (error) {
-      console.error('Firebase Error:', error); // Enhanced error logging
-      alert('Error adding data: ' + error.message); // Detailed alert based on the error message
-      setSubmitError('Failed to add data. Please try again later.'); // Set submit error state
+      console.error('Firebase Error:', error);
+      alert('Error adding data: ' + error.message);
+      setSubmitError('Failed to add data. Please try again later.');
     } finally {
-      setIsSubmitting(false); // Reset submission status
+      setIsSubmitting(false);
     }
   };
   
-  
-  /*
-  const handleAddData = async () => {
-    try {
-      const testRef = ref(db, 'test');
-      await set(testRef, { hello: "world" });
-      alert('Test data added successfully!');
-    } catch (error) {
-      console.error('Firebase Test Error:', error);
-      alert('Test error: ' + error.message);
-    }
-  };
-*/
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,12 +92,10 @@ export default function StudyRoomForm() {
       setIsSubmitting(false); // Reset submission status regardless of outcome
     }
   };
-  
-  
 
   return (
     <>
-      <h1>Skjema for søknad</h1>
+    <h1>Skjema for søknad</h1>
       <div className="study-room-form-container">
         {submitError && <p className="error">{submitError}</p>}
         <form onSubmit={handleSubmit}>
