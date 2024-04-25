@@ -1,12 +1,18 @@
 "use client"
 import { push, ref, set } from 'firebase/database';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../config/firebaseConfig';
 import "./temp.css"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from 'next/navigation';
+import { auth } from '../config/firebaseConfig';
 
 
 export default function StudyRoomForm() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   // State to keep track of form inputs
   const [formData, setFormData] = useState({
     name: '',
@@ -91,7 +97,29 @@ export default function StudyRoomForm() {
     } finally {
       setIsSubmitting(false); // Reset submission status regardless of outcome
     }
-  };
+  }
+  
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          // User is signed in
+          setUser(currentUser);
+          setLoading(false);
+        } else {
+          // No user is signed in
+          router.push('/');
+        }
+      });
+  
+      // Cleanup subscription on unmount
+      return () => {
+        unsubscribe();
+      };
+    }, []); // Empty dependency array means this effect only runs once on mount
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
 
   return (
     <>
@@ -161,4 +189,5 @@ export default function StudyRoomForm() {
       </div>
     </>
   );
-}
+
+};
