@@ -25,32 +25,36 @@ export default function SignupPage() {
     };
 
     return (
-        <div>
-            <h1>Signup</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email:</label>
+        <div className="form-container">
+            <h1>Sign up</h1>
+            <form onSubmit={handleSubmit} style={{ maxWidth: '500px', paddingTop: "20px"}}>
+                <div className="form-row">
+                    <label htmlFor="email" className="form-label">Email:</label>
                     <input
                         type="email"
                         id="email"
+                        className="form-input"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
+                <div className="form-row">
+                    <label htmlFor="password" className="form-label">Password:</label>
                     <input
                         type="password"
                         id="password"
+                        className="form-input"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <button type="submit">Signup</button>
+                <div className="form-buttons">
+                    <button type="submit" className="login-button">Sign up</button>
+                    <button onClick={() => router.push('/login')} className="login-button">Login</button>
+                </div>
             </form>
-            <button onClick={() => router.push('/login')}>Login</button>
         </div>
     );
 }

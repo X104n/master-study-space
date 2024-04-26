@@ -26,7 +26,7 @@ export default function LoginPage() {
 
     return (
         <div className="form-container">
-            <h1>Login</h1>
+            <h1>Logg inn</h1>
             <form onSubmit={handleSubmit} style={{ maxWidth: '500px', paddingTop: "20px"}}>
                 <div className="form-row">
                     <label htmlFor="email" className="form-label">Email:</label>
