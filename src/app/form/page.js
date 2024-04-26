@@ -122,72 +122,77 @@ export default function StudyRoomForm() {
     }
 
   return (
-    <>
-    <h1>Skjema for søknad</h1>
-      <div className="study-room-form-container">
-        {submitError && <p className="error">{submitError}</p>}
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                disabled={isSubmitting}
-                placeholder="Ola Norman"
-            />
-          </div>
-          <div>
-            <label htmlFor="studentNumber">Student Number:</label>
-            <input
-                type="text"
-                id="studentNumber"
-                name="studentNumber"
-                value={formData.studentNumber}
-                onChange={handleChange}
-                required
-                disabled={isSubmitting}
-                placeholder="abc123"
-            />
-          </div>
-          <div>
-            <label htmlFor="studyRoom">What master reading room do you wish to study in:</label>
-            <select
-                id="studyRoom"
-                name="studyRoom"
-                value={formData.studyRoom}
-                onChange={handleChange}
-                required
-                disabled={isSubmitting}
-            >
-              <option value="">Select a room</option>
-              <option value="Algoritme">Algoritme</option>
-              <option value="Jafu">Jafu</option>
-              <option value="Optimering">Optimering</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="examinationDate">Examination Date:</label>
-            <input
-                type="text"
-                id="examinationDate"
-                name="examinationDate"
-                value={formData.examinationDate}
-                onChange={handleChange}
-                required
-                disabled={isSubmitting}
-                placeholder="V2025"
-            />
-          </div>
-          <button type="submit" className="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </button>
-        </form>
-      </div>
-    </>
+      <>
+        <h1>Skjema for søknad</h1>
+        <div className="study-room-form-container">
+          {submitError && <p className="error">{submitError}</p>}
+          <form onSubmit={handleSubmit} className="form">
+            <div className="input-group">
+              <label htmlFor="name">Navn:</label>
+              <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="Ola Norman"
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="studentNumber">Student Nr.:</label>
+              <input
+                  type="text"
+                  id="studentNumber"
+                  name="studentNumber"
+                  value={formData.studentNumber}
+                  onChange={handleChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="abc123"
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="studyRoom">Ønsket master lesesal:</label>
+              <select
+                  id="studyRoom"
+                  name="studyRoom"
+                  value={formData.studyRoom}
+                  onChange={handleChange}
+                  required
+                  disabled={isSubmitting}
+              >
+                <option value="Selmer">Selmer (2. etasje)</option>
+                <option value="Glassburet">Glassburet (3. etasje)</option>
+                <option value="Algoritme">Algoritme (3. etasje)</option>
+                <option value="Jafu">Jafu (4. etasje)</option>
+                <option value="Optimering">Optimering (4. etasje)</option>
+                <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
+              </select>
+            </div>
+            <div className="input-group">
+              <label htmlFor="examinationDate">Eksamineringsdato:</label>
+              <input
+                  type="text"
+                  id="examinationDate"
+                  name="examinationDate"
+                  value={formData.examinationDate}
+                  onChange={handleChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="V2025"
+              />
+            </div>
+            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+              <button type="submit" className="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </>
   );
+
 
 };
