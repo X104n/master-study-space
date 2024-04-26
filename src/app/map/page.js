@@ -29,7 +29,7 @@ export default function Home() {
     return (
         <>
             <div style={{ display: 'flex' }}>
-                <div style={{ width: "200px", padding: '10px' }}>
+                <div style={{ width: "200px", padding: '10px', paddingTop: "100px"}}>
                     {/* Buttons to select the iframe and image sources */}
                     <button className={"map-button"} onClick={() => handleButtonClick(
                         "https://use.mazemap.com/#v=1&campusid=340&zlevel=2&center=5.330665,60.381471&zoom=18&sharepoitype=poi&sharepoi=1000719877",
@@ -56,23 +56,24 @@ export default function Home() {
                         ["path_to_image1_set6.jpg", "path_to_image2_set6.jpg", "path_to_image3_set6.jpg", "path_to_image4_set6.jpg"]
                     )}>Maskinlæring (6. etasje)</button>
                 </div>
-                <div style={{ padding: '10px' }}>
+                <div style={{padding: '10px'}}>
                     <h1>Lokasjon for Mastersalene</h1>
+                    <div className="grid-container">
+                        {src.images.map((imgSrc, index) => (
+                            <div className="grid-item" key={index}>
+                                <img src={imgSrc} alt={`Image ${index + 1}`}/>
+                            </div>
+                        ))}
+                    </div>
                     <iframe
                         key={src.iframe}
                         src={src.iframe}
-                        style={{ width: '800px', height: '400px' }}
+                        style={{width: '800px', height: '700px'}}
                         onLoad={() => console.log("Iframe loaded with src:", src.iframe)}
                     ></iframe>
                 </div>
             </div>
-            <div className="grid-container">
-                {src.images.map((imgSrc, index) => (
-                    <div className="grid-item" key={index}>
-                        <img src={imgSrc} alt={`Image ${index + 1}`}/>
-                    </div>
-                ))}
-            </div>
+
         </>
     );
 }
