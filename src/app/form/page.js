@@ -107,7 +107,7 @@ export default function StudyRoomForm() {
           setLoading(false);
         } else {
           // No user is signed in
-          router.push('/');
+          router.push('/login');
         }
       });
   
