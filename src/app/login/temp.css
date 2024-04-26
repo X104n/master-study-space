@@ -1,0 +1,55 @@
+.login-label {
+    width: 100px
+}
+
+
+.login-button {
+    background-color: #181818;
+    width: 80px;
+    color: white;
+    border: none;
+    padding: .5rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin: 5px;
+}
+
+.login-button:hover {
+    background-color: #212121;
+}
+
+
+.form-container {
+    padding: 20px; /* Add padding for some spacing from the browser's edge */
+    min-height: 100vh; /* Keeps the form vertically centered on the page */
+}
+
+.form-row {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.form-label {
+    width: 15%; /* Adjust the width as needed */
+    text-align: right;
+    justify-content: center;
+    padding-right: 10px; /* Space between label and input */
+}
+
+.form-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #181818;
+}
+
+.form-buttons{
+    justify-content: center;
+    align-items: center;
+    padding-left: 50px;
+}

@@ -3,6 +3,7 @@ import {useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../config/firebaseConfig';
+import "./temp.css";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -24,34 +25,36 @@ export default function LoginPage() {
     };
 
     return (
-        <div>
+        <div className="form-container">
             <h1>Login</h1>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
-            </div>
-            <button onClick={() => router.push('/signup')}>Sign up</button>
+            <form onSubmit={handleSubmit} style={{ maxWidth: '500px', paddingTop: "20px"}}>
+                <div className="form-row">
+                    <label htmlFor="email" className="form-label">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        className="form-input"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-row">
+                    <label htmlFor="password" className="form-label">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        className="form-input"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-buttons">
+                    <button type="submit" className="login-button">Login</button>
+                    <button onClick={() => router.push('/signup')} className="login-button">Sign up</button>
+                </div>
+            </form>
         </div>
     );
 }
