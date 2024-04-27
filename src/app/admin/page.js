@@ -12,12 +12,12 @@ export default function Admin() {
     const router = useRouter();
     const [users, setUsers] = useState([]);
     const [usersSorted, setUsersSorted] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isSorted, setIsSorted] = useState(false); // State to track if the list has been sorted
 
-    // Modified merge function that takes into account the examination date prefix and year
     const merge = (left, right, key) => {
         let arr = [];
         while (left.length && right.length) {
-            // Parsing the examinationDate to compare 'V' and 'H' and the year
             const leftDate = left[0][key];
             const rightDate = right[0][key];
             const leftYear = parseInt(leftDate.substring(1), 10);
@@ -25,7 +25,6 @@ export default function Admin() {
             const leftPrefix = leftDate[0]; // 'V' or 'H'
             const rightPrefix = rightDate[0]; // 'V' or 'H'
 
-            // Compare first by year, then by 'V' or 'H'
             if (leftYear < rightYear || (leftYear === rightYear && leftPrefix < rightPrefix)) {
                 arr.push(left.shift());
             } else {
@@ -47,6 +46,16 @@ export default function Admin() {
     const sortUsers = () => {
         const sorted = mergeSort([...users], 'examinationDate');
         setUsersSorted(sorted);
+        setIsSorted(true); // Set isSorted to true after sorting
+    };
+
+    const selectRandomUser = () => {
+        if (usersSorted.length > 0) {
+            const earliestDate = usersSorted[0].examinationDate;
+            const earliestGroup = usersSorted.filter(user => user.examinationDate === earliestDate);
+            const randomUser = earliestGroup[Math.floor(Math.random() * earliestGroup.length)];
+            setSelectedUser(randomUser);
+        }
     };
 
     const populateUsers = async () => {
@@ -75,7 +84,7 @@ export default function Admin() {
 
                     if (isAdmin) {
                         setUser(currentUser);
-                        populateUsers();
+                        await populateUsers();
                         setLoading(false);
                     } else {
                         router.push('/');
@@ -101,12 +110,28 @@ export default function Admin() {
         <>
             <h1>Admin</h1>
             <button onClick={sortUsers}>Sort Users</button>
+            {isSorted && (
+                <button onClick={selectRandomUser}>Select Random User from Earliest Group</button>
+            )}
             <div>
-                {usersSorted.map(user => (
-                    <div key={user.id}>
-                        {user.name} - {user.examinationDate}
+                {selectedUser ? (
+                    <div>
+                        <strong>Selected User:</strong> {selectedUser.name} - {selectedUser.examinationDate}
                     </div>
-                ))}
+                ) : null}
+                {usersSorted.length === 0 ? (
+                    users.map(user => (
+                        <div key={user.id}>
+                            {user.examinationDate} - {user.name}
+                        </div>
+                    ))
+                ) : (
+                    usersSorted.map(user => (
+                        <div key={user.id}>
+                            {user.examinationDate} - {user.name}
+                        </div>
+                    ))
+                )}
             </div>
         </>
     );
