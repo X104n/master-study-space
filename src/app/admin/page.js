@@ -1,14 +1,41 @@
 'use client'
 import {useState, useEffect} from 'react';
 import {onAuthStateChanged} from "firebase/auth";
-import {auth, dbs} from '../config/firebaseConfig';
+import {auth, dbs, db} from '../config/firebaseConfig';
 import {useRouter} from 'next/navigation';
-import {doc, getDoc} from "firebase/firestore";
+import {getDatabase, ref, child, get} from "firebase/database";
+import {onValue, query, orderByKey} from "firebase/database";
+import {
+    getDocs,
+    getDoc,
+    collection,
+    doc,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    setDoc,
+} from "firebase/firestore";
+
 
 export default function Admin() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const [users, setUsers] = useState([]);
+
+    const populateUsers = async () => {
+        const formsRef = ref(db, 'forms');  // Adjust this path if your database structure is different
+        try {
+            const snapshot = await get(formsRef);
+            if (snapshot.exists()) {
+                setUsers(Object.values(snapshot.val()));  // Convert object of objects into an array
+            } else {
+                console.log('No data available');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -29,6 +56,8 @@ export default function Admin() {
                 } else {
                     router.push('/');
                 }
+            } else {
+                router.push('/');
             }
         });
 
@@ -36,7 +65,13 @@ export default function Admin() {
         return () => {
             unsubscribe();
         };
+
+
     }, []); // Empty dependency array means this effect only runs once on mount
+
+    const click = () => {
+        populateUsers();
+    }
 
     if (loading) {
         return <div>Loading...</div>;
@@ -46,8 +81,10 @@ export default function Admin() {
     return (
         <>
             <h1>Admin</h1>
-            <p>Name: {user?.displayName || 'UserID not available'}</p>
-
+            <button onClick={click}>Click pop</button>
+            <button onClick={() => console.log("Users: ", users)}>Click print</button>
+            <pre>{JSON.stringify(users, null, 2)}</pre>
+            {/* Optional: To display users data on the page */}
         </>
     );
 }
