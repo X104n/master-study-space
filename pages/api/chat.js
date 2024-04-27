@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { message } = req.body;  // extracts message from the request body
+    const { message } = req.body;  // extracts message from the request body  
     // payload for OpenAI API request
     const payload = {
       model: "gpt-3.5-turbo",
