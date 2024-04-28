@@ -2,21 +2,36 @@
 import "./temp.css"
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "@/app/config/firebaseConfig";
 import { signOut } from "firebase/auth";
 
 export default function Navbar() {
     const router = useRouter();
-
     const [showDropdown, setShowDropdown] = useState(false)
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown)
-    }
-
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const dropdownRef = useRef(null)
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowDropdown(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add when the component mounts
+        document.addEventListener("mousedown", handleClickOutside);
+        // Return function to be called when unmounted
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -65,8 +80,7 @@ export default function Navbar() {
                         </ul>
                     </div>
                     <div className={"items-center profile"}>
-                    <button className="login-button unique-login-style" onClick={() => router.push('/login')}>Logg inn</button>
-
+                        <button onClick={() => router.push('/login')}>Logg inn</button>
                     </div>
                 </div>
             </div>
@@ -109,7 +123,7 @@ export default function Navbar() {
                         </svg>
                     </button>
                     {showDropdown && (
-                        <div className={"dropdown-menu"}>
+                        <div className={"dropdown-menu"} ref={dropdownRef}>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
                             <button
