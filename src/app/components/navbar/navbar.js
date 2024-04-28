@@ -4,13 +4,15 @@ import { useRouter } from 'next/navigation';
 import Image from "next/image"
 import {useEffect, useState} from "react";
 import {onAuthStateChanged} from "firebase/auth";
-import {auth} from "@/app/config/firebaseConfig";
+import {auth, dbs} from "@/app/config/firebaseConfig";
 import { signOut } from "firebase/auth";
+import {doc, getDoc} from "firebase/firestore";
 
 export default function Navbar() {
     const router = useRouter();
 
     const [showDropdown, setShowDropdown] = useState(false)
+    const [showAdmin, setShowAdmin] = useState(false)
     const toggleDropdown = () => {
         setShowDropdown(!showDropdown)
     }
@@ -19,10 +21,21 @@ export default function Navbar() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 // User is signed in
                 setUser(currentUser);
+
+                const docRef = doc(dbs, "users", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    if (userData.isAdmin) {
+                        setShowAdmin(true);
+                    }
+                }
+
                 setLoading(false);
             } else {
                 // No user is signed in
@@ -110,7 +123,10 @@ export default function Navbar() {
                     {showDropdown && (
                         <div className={"dropdown-menu"}>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
-                            <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
+                            {showAdmin ? (
+                                <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
+                            ) : null}
+
                             <button
                                 className={"dropdown-menu-button"}
                                 onClick={async () => {
