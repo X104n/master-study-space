@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     };
 
     try {
-        const apiResponse = await fetch('https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat/openai/chat/completions', options);
+        const apiResponse = await fetch('https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat', options);
         const data = await apiResponse.json(); // 'https://api.openai.com/v1/chat/completions'
 
         if (!apiResponse.ok) {
