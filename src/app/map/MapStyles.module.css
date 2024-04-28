@@ -1,0 +1,9 @@
+/* remove file ?*/
+
+.mazemap-popup .mapboxgl-popup-content {
+    color: #000; /* Dark text for better visibility */
+    font-size: 14px; /* Larger text for easier reading */
+    background-color: #fff; /* Light background for the popup */
+    padding: 10px; /* More space around the text */
+    border-radius: 5px; /* Optional: rounded corners for the popup */
+}
