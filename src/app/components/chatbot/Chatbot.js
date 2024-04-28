@@ -40,9 +40,9 @@ function Chatbot() {
   };
 
    // detect key to send a message
-  const handleKeyDown = (event) => {
+  const handleKeyDown = async (event) => {
     if (event.key === 'Enter') {
-      sendMessage();
+      await sendMessage();
     }
   };
 
