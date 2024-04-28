@@ -52,7 +52,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 45%;
+  width: 50%;
   margin: 10px;
   font-size: 15px;
 }
@@ -63,11 +63,9 @@
 
 .application-details-grid {
   display: grid;
-  grid-template-columns: auto 1fr; /* First column for labels, second for info */
-  gap: 10px;
+  grid-template-columns: auto 1fr; /* Creates two columns: one for labels and one for info */
+  gap: 10px; /* Space between rows and columns */
   align-items: center; /* Align items vertically */
-  width: 100%;
-  padding: 8px;
 }
 
 .detail-label {
@@ -84,15 +82,13 @@
   background-color: #202020;
   padding: 10px;
   border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 10px;
-  gap: 20px; /* Space between the grid and the button */
+  display: flex;
+  flex-direction: column;
 }
 
 .delete-button {
-  padding: 8px 16px; /* Adjust padding to make the button more prominent */
+  padding: 8px 16px;
   background-color: #d82a25;
   font-size: 16px;
   color: white;
@@ -100,7 +96,9 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-right: 15px;
+  width: 100px;
+  align-self: flex-end; /* Align the button to the right (flex-end of the column) */
+  margin-top: 10px; /* Adds some space above the button */
 }
 
 .delete-button:hover {

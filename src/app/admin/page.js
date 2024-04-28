@@ -125,29 +125,43 @@ export default function Admin() {
                     {/*<div style={{display: "flex", justifyContent: "center"}}>*/}
                         {/*<button className={"cool-button"} onClick={sortUsers}>Sort by examination date</button>*/}
                         {isSorted && (
-                            <button className={"cool-button"} onClick={selectRandomUser}>Select random user from
-                                earliest group</button>
+                            <button className={"cool-button"} onClick={selectRandomUser}>Velg en tilfeldig bruker fra den tidligste gruppen</button>
                         )}
                     {/*</div>*/}
                     <div>
                         {selectedUser && (
+                            <>
+                            <h3>Valgt Søknad:</h3>
                             <div className="application-item">
                                 <div className="application-details-grid">
-                                <div className="detail-label">Selected User:</div>
-                                    <div className="detail-info">{selectedUser.examinationDate} - {selectedUser.name}</div>
-                                    <button className={"delete-button"} onClick={() => deleteUser(selectedUser.id)}>Delete</button>
+                                    <div className="detail-label">Navn:</div>
+                                    <div className="detail-info">{selectedUser.name}</div>
+
+                                    <div className="detail-label">Eksamineringsdato:</div>
+                                    <div className="detail-info">{selectedUser.examinationDate}</div>
+
+                                    <button className="delete-button"
+                                            onClick={() => deleteUser(selectedUser.id)}>Slett
+                                    </button>
                                 </div>
                             </div>
+                            </>
                         )}
                         {isSorted && usersSorted.length > 0 && (
-                            usersSorted.map((user, index) => (
-                                <div key={user.id || index} className="application-item">
-                                    <div className="application-details-grid">
-                                        <div className="detail-label">Date:</div>
-                                        <div className="detail-info">{user.examinationDate} - {user.name}</div>
+                            <>
+                                <h3>Søknader:</h3>
+                                {usersSorted.map((user, index) => (
+                                    <div key={user.id || index} className="application-item">
+                                        <div className="application-details-grid">
+                                            <div className="detail-label">Navn:</div>
+                                            <div className="detail-info">{user.name}</div>
+
+                                            <div className="detail-label">Eksamineringsdato:</div>
+                                            <div className="detail-info">{user.examinationDate}</div>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                                ))}
+                            </>
                         )}
                     </div>
                 </div>
