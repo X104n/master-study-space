@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 import { get, ref } from "firebase/database";
 import { db } from "@/app/config/firebaseConfig";
+import { filterAndSortUsers } from '../components/sort';
 
 export default function Overview() {
     const [forms, setForms] = useState([]);
+    const studyRooms = ['Jafu', 'Sikkerhet', 'Optimering', 'Selmer', 'Glassburet', 'Maskinlæring'];
 
     const populateForms = async () => {
         const formsRef = ref(db, 'forms');
@@ -28,46 +30,18 @@ export default function Overview() {
         populateForms();
     }, []);
 
-return (
-    <>
-        <ul>
-            <li>
-                Jafu
-                {forms.filter(form => form.studyRoom === 'Jafu').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
+    return (
+        <>
+            <ul>
+                {studyRooms.map(room => (
+                    <li key={room}>
+                        {room}
+                        {filterAndSortUsers(forms.filter(form => form.studyRoom === room), 'examinationDate', room).map((form, index) => (
+                            <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
+                        ))}
+                    </li>
                 ))}
-            </li>
-            <li>
-                Sikkerhet
-                {forms.filter(form => form.studyRoom === 'Sikkerhet').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
-                ))}
-            </li>
-            <li>
-                Optimering
-                {forms.filter(form => form.studyRoom === 'Optimering').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
-                ))}
-            </li>
-            <li>
-                Selmer
-                {forms.filter(form => form.studyRoom === 'Selmer').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
-                ))}
-            </li>
-            <li>
-                Glassburet
-                {forms.filter(form => form.studyRoom === 'Glassburet').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
-                ))}
-            </li>
-            <li>
-                Maskinlæring
-                {forms.filter(form => form.studyRoom === 'Maskinlæring').map((form, index) => (
-                    <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
-                ))}
-            </li>
-        </ul>
-    </>
-)
+            </ul>
+        </>
+    )
 }
