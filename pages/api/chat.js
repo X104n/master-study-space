@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const options = {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer sk-proj-tQr8Y5ahffVbYMgvK5vcT3BlbkFJLyN6O1uDTuh0x7SY4psW`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
@@ -36,4 +36,3 @@ export default async function handler(req, res) {
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
-export const config = { runtime: 'edge' };
