@@ -16,6 +16,7 @@ export default function DesksAdmin() {
             if (snapshot.exists()) {
                 setDesks(snapshot.val());
                 setLoading(false);
+
             } else {
                 console.log("No data available");
                 setLoading(false);
