@@ -2,7 +2,7 @@
 import "./temp.css"
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth, dbs} from "@/app/config/firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -16,6 +16,26 @@ export default function Navbar() {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const dropdownRef = useRef(null)
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowDropdown(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add when the component mounts
+        document.addEventListener("mousedown", handleClickOutside);
+        // Return function to be called when unmounted
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -119,7 +139,9 @@ export default function Navbar() {
                         <li>
                             <button onClick={() => router.push('/overview')}>Alle søknader</button>
                         </li>
+
                     </ul>
+
                 </div>
 
                 <div className={"items-center profile"}>
@@ -133,7 +155,7 @@ export default function Navbar() {
                         </svg>
                     </button>
                     {showDropdown && (
-                        <div className={"dropdown-menu"}>
+                        <div className={"dropdown-menu"} ref={dropdownRef}>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
                             {showAdmin ? (
                                 <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
