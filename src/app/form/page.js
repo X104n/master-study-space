@@ -1,5 +1,5 @@
 "use client"
-import { push, ref, set } from 'firebase/database';
+import {push, ref, set, get, remove} from 'firebase/database';
 import React, { useState, useEffect } from 'react';
 import { db } from '../config/firebaseConfig';
 import "./temp.css"
@@ -13,6 +13,8 @@ export default function StudyRoomForm() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [showNewFormPage, setShowNewFormPage] = useState(true)
+  const [forms, setForms] = useState([]);
   // State to keep track of form inputs
   const [formData, setFormData] = useState({
     name: '',
@@ -67,8 +69,8 @@ export default function StudyRoomForm() {
         ...formData,
         userId: user.uid  // Link the form to the user's UID
       });
-      console.log("Data added successfully!");
-      alert('Data added successfully!');
+      console.log("Søknad sent!");
+      alert('Søknad sent!');
       setFormData({ name: '', studentNumber: '', studyRoom: '', examinationDate: '' }); // Reset form
     } catch (error) {
       console.error('Firebase Error:', error);
@@ -98,12 +100,44 @@ export default function StudyRoomForm() {
       setIsSubmitting(false); // Reset submission status regardless of outcome
     }
   }
+
+  const getForms = async (currentUser) => {
+    const formsRef = ref(db, 'forms'); // Reference to the forms node in Firebase
+    const snapshot = await get(formsRef); // Fetch all the forms
+
+    if (snapshot.exists()) {
+      const allForms = snapshot.val();
+      // Filter forms for the current user
+      const userForms = Object.entries(allForms).reduce((acc, [key, form]) => {
+        if (form.userId === currentUser.uid) {
+          // Add form key for identification if needed
+          acc.push({ ...form, id: key });
+        }
+        return acc;
+      }, []);
+      setForms(userForms); // Set the filtered forms to the state
+      setShowNewFormPage(userForms.length === 0); // Show form if no applications exist
+    } else {
+      console.log('No data available');
+      setShowNewFormPage(true); // Show form if no applications exist
+    }
+  };
+
+  const deleteApplication = async (applicationId) => {
+    // Here you would call Firebase to delete the application
+    // For example:
+    const applicationRef = ref(db, 'forms/' + applicationId);
+    await remove(applicationRef);
+    // Update the local state to remove the application from the list
+    setForms(forms.filter((form) => form.id !== applicationId));
+  };
   
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (currentUser) {
-          // User is signed in
-          setUser(currentUser);
+          setUser(currentUser); // Set the current user
+          await getForms(currentUser);
+
           setLoading(false);
         } else {
           // No user is signed in
@@ -121,76 +155,132 @@ export default function StudyRoomForm() {
       return <div>Loading...</div>;
     }
 
+
   return (
       <>
-        <h1>Skjema for søknad</h1>
-        <div className="study-room-form-container">
-          {submitError && <p className="error">{submitError}</p>}
-          <form onSubmit={handleSubmit} className="form">
-            <div className="input-group">
-              <label htmlFor="name">Navn:</label>
-              <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="Ola Norman"
-              />
+        {!showNewFormPage ? (
+        <>
+          <h1>Dine Søknader</h1>
+          <div className={"study-room-form-container"}>
+            <div className="form">
+              {forms.map((form, index) => (
+                  <div key={index} className="application-item">
+                    <div className="application-details-grid">
+                      <div className="detail-label">ID:</div>
+                      <div className="detail-info">{form.id}</div>
+
+                      <div className="detail-label">Navn:</div>
+                      <div className="detail-info">{form.name}</div>
+
+                      <div className="detail-label">Student Nr.:</div>
+                      <div className="detail-info">{form.studentNumber}</div>
+
+                      <div className="detail-label">Lesesal:</div>
+                      <div className="detail-info">{form.studyRoom}</div>
+
+                      <div className="detail-label">Eksamineringsdato:</div>
+                      <div className="detail-info">{form.examinationDate}</div>
+                    </div>
+                    <button
+                        onClick={() => deleteApplication(form.id)}
+                        className="delete-button"
+                    >
+                      Slett
+                    </button>
+                  </div>
+              ))}
             </div>
-            <div className="input-group">
-              <label htmlFor="studentNumber">Student Nr.:</label>
-              <input
-                  type="text"
-                  id="studentNumber"
-                  name="studentNumber"
-                  value={formData.studentNumber}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="abc123"
-              />
+            <div style={{display: "flex", justifyContent: "center", width: "60%"}}>
+              <button className={"submit-button"} onClick={() => setShowNewFormPage(true)}
+              >Send inn ny søknad</button>
             </div>
-            <div className="input-group">
-              <label htmlFor="studyRoom">Ønsket master lesesal:</label>
-              <select
-                  id="studyRoom"
-                  name="studyRoom"
-                  value={formData.studyRoom}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-              >
-                <option value="Selmer">Selmer (2. etasje)</option>
-                <option value="Glassburet">Glassburet (3. etasje)</option>
-                <option value="Algoritme">Algoritme (3. etasje)</option>
-                <option value="Jafu">Jafu (4. etasje)</option>
-                <option value="Optimering">Optimering (4. etasje)</option>
-                <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
-              </select>
-            </div>
-            <div className="input-group">
-              <label htmlFor="examinationDate">Eksamineringsdato:</label>
-              <input
-                  type="text"
-                  id="examinationDate"
-                  name="examinationDate"
-                  value={formData.examinationDate}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="V2025"
-              />
-            </div>
-            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
-              <button type="submit" className="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting...' : 'Submit'}
+          </div>
+        </>
+
+        ) : (
+            <>
+              <h1>Send inn ny søknad</h1>
+              <div className="study-room-form-container">
+                {submitError && <p className="error">{submitError}</p>}
+                <form onSubmit={handleSubmit} style={{paddingTop: "13px"}} className="form">
+                  <div className="input-group">
+                    <label htmlFor="name">Navn:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        disabled={isSubmitting}
+                        placeholder="Ola Norman"
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="studentNumber">Student Nr.:</label>
+                    <input
+                        type="text"
+                    id="studentNumber"
+                    name="studentNumber"
+                    value={formData.studentNumber}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                    placeholder="abc123"
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="studyRoom">Ønsket master lesesal:</label>
+                <select
+                    id="studyRoom"
+                    name="studyRoom"
+                    value={formData.studyRoom}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                >
+                  <option value="" disabled>Velg et rom</option>
+                  <option value="Selmer">Selmer (2. etasje)</option>
+                  <option value="Glassburet">Glassburet (3. etasje)</option>
+                  <option value="Algoritme">Algoritme (3. etasje)</option>
+                  <option value="Jafu">Jafu (4. etasje)</option>
+                  <option value="Optimering">Optimering (4. etasje)</option>
+                  <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
+                </select>
+              </div>
+                  <div className="input-group">
+                <label htmlFor="examinationDate">Eksamineringsdato:</label>
+                <input
+                    type="text"
+                    id="examinationDate"
+                    name="examinationDate"
+                    value={formData.examinationDate}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                    placeholder="V2025"
+                />
+              </div>
+
+              <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                <button type="submit" className="submit submit-button" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sender inn...' : 'Send inn'}
+                </button>
+              </div>
+              {}
+
+            </form>
+
+            <div style={{display: "flex", justifyContent: "center", width: "60%"}}>
+              <button  className={"submit-button"} onClick={() => {
+                setShowNewFormPage(false);
+                getForms(user);
+              }}>Dine Søknader
               </button>
             </div>
-          </form>
-        </div>
+              </div>
+            </>
+        )}
       </>
   );
 
