@@ -10,11 +10,9 @@ import {doc, getDoc} from "firebase/firestore";
 
 export default function Navbar() {
     const router = useRouter();
+
     const [showDropdown, setShowDropdown] = useState(false)
     const [showAdmin, setShowAdmin] = useState(false)
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown)
-    }
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
