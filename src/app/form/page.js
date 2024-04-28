@@ -101,22 +101,27 @@ export default function StudyRoomForm() {
     }
   }
 
-  const getForms = async () => {
+  const getForms = async (currentUser) => {
     const formsRef = ref(db, 'forms'); // Reference to the forms node in Firebase
-    try {
-      const snapshot = await get(formsRef); // Fetch all the forms
-      if (snapshot.exists()) {
-        const forms = snapshot.val();
-        const userForms = Object.values(forms).filter(form => form.userId === user.uid); // Filter forms for the current user
-        setForms(userForms); // Set the filtered forms to the state
-        setShowNewFormPage(userForms.length === 0); // Show form if no applications exist
-      } else {
-        console.log('No data available');
+    const snapshot = await get(formsRef); // Fetch all the forms
+
+    if (snapshot.exists()) {
+      const allForms = snapshot.val();
+      // Filter forms for the current user
+      const userForms = Object.entries(allForms).reduce((acc, [key, form]) => {
+        if (form.userId === currentUser.uid) {
+          // Add form key for identification if needed
+          acc.push({ ...form, id: key });
         }
-    } catch (error) {
-      console.error("Error fetching users:", error);
+        return acc;
+      }, []);
+      setForms(userForms); // Set the filtered forms to the state
+      setShowNewFormPage(userForms.length === 0); // Show form if no applications exist
+    } else {
+      console.log('No data available');
+      setShowNewFormPage(true); // Show form if no applications exist
     }
-  }
+  };
   
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -144,10 +149,27 @@ export default function StudyRoomForm() {
 
   return (
       <>
-        <h1>Skjema for søknad</h1>
-        {forms.length > 0 && !showNewFormPage ? (
-            <div>{forms}</div>
+        <h1>Søknader</h1>
+        {!showNewFormPage ? (
+          <div className={"study-room-form-container"}>
+            <div className={"form"}>
+            {forms.map((form, index) => (
+                <div key={index}>
+                  <div>Name: {form.name}</div>
+                  <div>Student Number: {form.studentNumber}</div>
+                  <div>Study Room: {form.studyRoom}</div>
+                  <div>Examination Date: {form.examinationDate}</div>
+                  {/* Render other details as needed */}
+                </div>
+            ))}
+              <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+                <button onClick={() => setShowNewFormPage(true)}>Send in a new application</button>
+              </div>
+            </div>
+          </div>
+
         ) : (
+
           <div className="study-room-form-container">
             {submitError && <p className="error">{submitError}</p>}
             <form onSubmit={handleSubmit} className="form">
@@ -208,14 +230,19 @@ export default function StudyRoomForm() {
                     placeholder="V2025"
                 />
               </div>
-              <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+
+              <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
                 <button type="submit" className="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? 'Sender inn...' : 'Send inn'}
                 </button>
+              </div>
+              {}
+              <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                <button onClick={() => setShowNewFormPage(false)}>Vis Søknader</button>
               </div>
             </form>
           </div>
-        )}
+          )}
       </>
   );
 
