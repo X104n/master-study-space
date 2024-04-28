@@ -2,13 +2,13 @@
 import { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import './temp.css'; // Ensure this is the correct path to your CSS file
+import { filterAndSortUsers } from '../components/sort'; // Adjust the path as necessary
 
 export default function Overview() {
     const [forms, setForms] = useState([]);
     const studyRooms = ["Selmer", "Glassburet", "Algoritme", "Jafu", "Optimering", "Maskinlæring"];
     const studyRoomsInfo = ["Selmer (2. etasje)", "Glassburet (3. etasje)", "Algoritme (3. etasje)", "Jafu (4. etasje)", "Optimering (4. etasje)", "Maskinlæring (6. etasje)"];
 
-    // Create a mapping from study room names to their info
     const roomInfoMap = studyRooms.reduce((map, room, index) => {
         map[room] = studyRoomsInfo[index];
         return map;
@@ -37,17 +37,18 @@ export default function Overview() {
         <div className="overview-container">
             {studyRooms.map(room => (
                 <div key={room} className="study-room">
-                    <h2 className="study-room-title">{roomInfoMap[room]}</h2>  {/* Use mapped room info */}
+                    <h2 className="study-room-title">{roomInfoMap[room]}</h2>
                     <div className="study-room-divider"></div>
                     <div className="forms-container">
-                        {forms.filter(form => form.studyRoom === room).map((form, index) => (
-                            <div key={index} className="form-item">
-                                <div className="form-label">Name:</div>
-                                <div className="form-data">{form.name}</div>
-                                <div className="form-label">Examination Date:</div>
-                                <div className="form-data">{form.examinationDate}</div>
-                            </div>
-                        ))}
+                        {filterAndSortUsers(forms.filter(form => form.studyRoom === room), 'examinationDate')
+                            .map((form, index) => (
+                                <div key={index} className="form-item">
+                                    <div className="form-label">Name:</div>
+                                    <div className="form-data">{form.name}</div>
+                                    <div className="form-label">Examination Date:</div>
+                                    <div className="form-data">{form.examinationDate}</div>
+                                </div>
+                            ))}
                     </div>
                 </div>
             ))}
