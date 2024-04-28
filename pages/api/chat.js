@@ -1,35 +1,40 @@
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+export const runtime = "edge";
 
-async function handleRequest(request) {
-  if (request.method === "POST") {
-    const { message } = await request.json();
-    const openAIResponse = await fetchOpenAI(message);
-    return new Response(JSON.stringify({ message: openAIResponse }), {
-      headers: { 'content-type': 'application/json' },
-      status: 200
-    });
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const { message } = req.body;  // extracts message from the request body
+    // payload for OpenAI API request
+    const payload = {
+      model: "gpt-3.5-turbo",
+      messages: [{role: "user", content: message}], 
+      max_tokens: 100
+    };
+    // request options for the OpenAI API
+    const options = {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    };
+
+    try {
+      // fetching the OpenAI API
+      const response = await fetch('https://api.openai.com/v1/chat/completions', options);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error.message);
+      }
+
+      // send the response back to the client
+      res.status(200).json({ message: data.choices[0].message.content });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: error.message });
+    }
   } else {
-    return new Response('Method not allowed', { status: 405 });
+    res.status(405).json({ error: 'Method not allowed' });
   }
 }
-
-async function fetchOpenAI(message) {
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer sk-proj-LqKnmwlhHbEc9ydbfSmfT3BlbkFJnxg64sUBbbr9NBzYZAWA`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      prompt: message,
-      max_tokens: 150
-    })
-  });
-  const data = await response.json();
-  return data.choices[0].text;
-}
-//${process.env.OPENAI_API_KEY}`
-// 'https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat/openai/v1/chat/completions
