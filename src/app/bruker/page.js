@@ -36,6 +36,7 @@ export default function Bruker() {
         <h1>My User</h1>
         <p>Name: {user?.displayName || 'Name not available'}</p>
         <p>Email: {user?.email || 'Email not available'}</p>
+
       </>
   );
 }
