@@ -10,7 +10,11 @@ import '@testing-library/jest-dom';
 jest.mock("firebase/auth", () => {
     return {
         getAuth: jest.fn(),
-        signInWithEmailAndPassword: jest.fn() // Change to signInWithEmailAndPassword
+        signInWithEmailAndPassword: jest.fn().mockResolvedValue({
+            user: {
+                email: 'test@example.com'
+            }
+        })
     };
 });
 
