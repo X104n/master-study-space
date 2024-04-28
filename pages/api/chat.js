@@ -1,36 +1,41 @@
-export const config = { runtime: 'edge' };
+export const config = {
+ runtime: 'edge'
+};
 
-export default async function handler(request) {
-  if (request.method === 'POST') {
-    try {
-      const data = await request.json();
-      const { message } = data;
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
+    }
 
-      const payload = {
+    const { message } = await req.json();
+
+    const payload = {
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: message }],
         max_tokens: 100
-      };
+    };
 
-      const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const options = {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json'
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
-      });
+    };
 
-      const responseData = await apiResponse.json();
-      if (!apiResponse.ok) {
-        return new Response(JSON.stringify({ error: responseData.error.message }), { status: apiResponse.status });
-      }
+    try {
+        // Adjust the URL to use the AI Gateway endpoint
+        const apiResponse = await fetch('https://gateway.ai.cloudflare.com/v1/ACCOUNT_TAG/GATEWA/openai/chat/completions', options);
+        const data = await apiResponse.json(); // 'https://api.openai.com/v1/chat/completions'
 
-      return new Response(JSON.stringify({ message: responseData.choices[0].message.content }), { status: 200 });
+        if (!apiResponse.ok) {
+            throw new Error(data.error.message || 'API request failed');
+        }
+
+        return new Response(JSON.stringify({ message: data.choices[0].message.content }), { status: 200 });
     } catch (error) {
-      return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+        console.error('Error:', error);
+        return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
-  } else {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
 }
