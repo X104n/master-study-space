@@ -50,7 +50,7 @@ const rooms = [
         lng: 5.331309, 
         lat: 60.381257, 
         zLevel: 3, 
-        zoom: 21.5,
+        zoom: 20.8,
         desks: [ 
         { id: 1, name: "Desk A1", lng: 5.331292197110059, lat: 60.38129713838666, status: 'available' },
         { id: 2, name: "Desk A2", lng: 5.3313313964430336, lat: 60.381286881923245, status: 'booked' },
@@ -74,7 +74,7 @@ const rooms = [
         lng: 5.330720,
         lat: 60.381403,
         zLevel: 4,
-        zoom: 21.5,
+        zoom: 21,
         desks: [
             { id: 1, name: "Desk A1", lng: 5.3307543103656485, lat: 60.38138219693977, status: "available" },
             { id: 2, name: "Desk A2", lng: 5.3307763664885215, lat: 60.38140110279028, status: "booked" },
@@ -110,8 +110,24 @@ const rooms = [
         lng: 5.330693,
         lat: 60.381404,
         zLevel: 6,
-        zoom: 21.5,
+        zoom: 21,
         desks: [
+           { id: 1, name: "Desk A1", lng: 5.330691493474973, lat: 60.38136628148442, status: 'available' },
+           { id: 2, name: "Desk A2", lng: 5.330716278361422, lat: 60.38136968406815, status: 'booked' },
+           { id: 3, name: "Desk A3", lng: 5.330736588199471, lat: 60.38137274639294, status: 'available' },
+           { id: 4, name: "Desk A4", lng: 5.330682199142046, lat: 60.38137904117076, status: 'available' },
+           { id: 5, name: "Desk A5", lng: 5.3307056070902945, lat: 60.381383124269234, status: 'available' },
+           { id: 1, name: "Desk A6", lng: 5.330728326570636, lat: 60.38138635672212, status: 'available' }, //DONE
+           { id: 2, name: "Desk A7", lng: 5.330673937513211, lat: 60.38139231123924, status: 'booked' },
+           { id: 3, name: "Desk A8", lng: 5.330697689696564, lat: 60.38139588394898, status: 'available' },
+           { id: 4, name: "Desk A9", lng: 5.330719376472786, lat: 60.38139826575525, status: 'available' },
+           { id: 5, name: "Desk A10", lng: 5.330664298946317, lat: 60.38140592156023, status: 'available' },
+           { id: 1, name: "Desk A11", lng: 5.330687706894537, lat: 60.38140915401058, status: 'available' },
+           { id: 2, name: "Desk A12", lng: 5.330711459077918, lat: 60.38141272671848, status: 'booked' },
+           { id: 3, name: "Desk A13", lng: 5.330656037317453, lat: 60.38141902148885, status: 'available' },
+           { id: 4, name: "Desk A14", lng: 5.3306804779687695, lat: 60.3814222539379, status: 'available' },
+           { id: 5, name: "Desk A15", lng: 5.330701820511024, lat: 60.381425486386604, status: 'available' },
+
 
         ]
     },
@@ -124,24 +140,32 @@ const rooms = [
 export default function Home() {
     const [currentRoom, setCurrentRoom] = useState(rooms[0]);
     const [showDesks, setShowDesks] = useState(false);
-
+  
     return (
-        <div style={{ display: 'flex' }}>
-            <div style={{ width: "200px", padding: '10px' }}>
-                {rooms.map(room => (
-                    <button key={room.id} className="map-button" onClick={() => setCurrentRoom(room)}>
-                        {room.name}
-                    </button>
-                ))}
-                <hr />
-                <button onClick={() => setShowDesks(!showDesks)}>
-                    {showDesks ? 'Hide Desks' : 'Show Desks'}
-                </button>
-            </div>
-            <div style={{ padding: '10px' }}>
-                <h1>Lokasjon for Mastersalene</h1>
-                <MapComponent room={currentRoom} showDesks={showDesks} />
-            </div>
+      <div className="container">
+        <div className="nav-panel">
+          {rooms.map(room => (
+            <button
+              key={room.id}
+              className={`map-button ${currentRoom.id === room.id ? "active" : ""}`}
+              onClick={() => setCurrentRoom(room)}
+            >
+              {room.name}
+            </button>
+          ))}
+          <hr />
+          <button
+            className={`map-button ${showDesks ? "active" : ""}`}
+            onClick={() => setShowDesks(!showDesks)}
+          >
+            {showDesks ? 'Hide Desks' : 'Show Desks'}
+          </button>
         </div>
+        <div className="content">
+          <h1>Lokasjon for Mastersalene</h1>
+          <MapComponent room={currentRoom} showDesks={showDesks} />
+        </div>
+      </div>
     );
-}
+  }
+  
