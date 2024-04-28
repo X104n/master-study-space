@@ -2,19 +2,20 @@
   padding-top: 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .form {
   background-color: #181818;
   padding: 20px;
-  padding-top: 13px;
+  padding-bottom: 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 60%;
-  padding-bottom: 50px;
 
 }
 
@@ -43,7 +44,8 @@
   color: white;
 }
 
-.study-room-form-container button {
+
+.submit-button {
   padding: 10px;
   background-color: #212121;
   color: white;
@@ -51,10 +53,58 @@
   border-radius: 5px;
   cursor: pointer;
   margin-top: 40px;
+  margin-bottom: 50px;
   width: 80%;
   font-size: 16px;
 }
 
-.study-room-form-container button:hover {
+.submit-button:hover {
   background-color: #292929;
 }
+
+.application-details-grid {
+  display: grid;
+  grid-template-columns: auto 1fr; /* First column for labels, second for info */
+  gap: 10px;
+  align-items: center; /* Align items vertically */
+  width: 100%;
+}
+
+.detail-label {
+  font-weight: bold; /* Make labels bold */
+  color: #cccccc; /* Lighter text color for labels */
+}
+
+.detail-info {
+  color: #ffffff; /* White text color for info for better readability */
+}
+
+.application-item {
+  background-color: #202020;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 20px; /* Space between the grid and the button */
+}
+
+.delete-button {
+  padding: 8px 16px; /* Adjust padding to make the button more prominent */
+  background-color: #d9534f;
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 15px;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+
+
+
