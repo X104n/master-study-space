@@ -1,0 +1,59 @@
+.overview-container {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.overview-container h2 {
+    margin-top: -12px; /* Reset default margin */
+    padding-top: 10px; /* Add custom padding if needed */
+    color: #ffffff;
+}
+
+.study-room {
+    background-color: #181818;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Adjust width as necessary */
+    margin-bottom: 30px;
+}
+
+.study-room-title {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.study-room-divider {
+    height: 2px;
+    background-color: #4d4d4d; /* Choose a color that fits the theme */
+    width: 100%; /* Or a percentage to make it shorter than the container */
+    margin: 10px 0;
+}
+
+.forms-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Create a grid layout for form items */
+    gap: 10px;
+}
+
+.form-item {
+    background-color: #202020;
+    padding: 10px;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr; /* Make each form item 200px wide */
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    color: #cccccc;
+    font-weight: bold;
+}
+
+.form-data {
+    color: #ffffff;
+}

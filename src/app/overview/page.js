@@ -1,17 +1,24 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
-import { get, ref } from "firebase/database";
-import { db } from "@/app/config/firebaseConfig";
-import { filterAndSortUsers } from '../components/sort';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import './temp.css'; // Ensure this is the correct path to your CSS file
 
 export default function Overview() {
     const [forms, setForms] = useState([]);
-    const studyRooms = ['Jafu', 'Sikkerhet', 'Optimering', 'Selmer', 'Glassburet', 'Maskinlæring'];
+    const studyRooms = ["Selmer", "Glassburet", "Algoritme", "Jafu", "Optimering", "Maskinlæring"];
+    const studyRoomsInfo = ["Selmer (2. etasje)", "Glassburet (3. etasje)", "Algoritme (3. etasje)", "Jafu (4. etasje)", "Optimering (4. etasje)", "Maskinlæring (6. etasje)"];
 
-    const populateForms = async () => {
+    // Create a mapping from study room names to their info
+    const roomInfoMap = studyRooms.reduce((map, room, index) => {
+        map[room] = studyRoomsInfo[index];
+        return map;
+    }, {});
+
+    useEffect(() => {
+        const db = getDatabase();
         const formsRef = ref(db, 'forms');
-        try {
-            const snapshot = await get(formsRef);
+
+        const unsubscribe = onValue(formsRef, (snapshot) => {
             if (snapshot.exists()) {
                 const fetchedForms = Object.entries(snapshot.val()).map(([key, value]) => ({
                     ...value,
@@ -21,27 +28,29 @@ export default function Overview() {
             } else {
                 console.log('No data available');
             }
-        } catch (error) {
-            console.error("Error fetching forms:", error);
-        }
-    };
+        });
 
-    useEffect(() => {
-        populateForms();
+        return () => unsubscribe();
     }, []);
 
     return (
-        <>
-            <ul>
-                {studyRooms.map(room => (
-                    <li key={room}>
-                        {room}
-                        {filterAndSortUsers(forms.filter(form => form.studyRoom === room), 'examinationDate', room).map((form, index) => (
-                            <p key={index}>Name: {form.name} - Examination Date: {form.examinationDate}</p>
+        <div className="overview-container">
+            {studyRooms.map(room => (
+                <div key={room} className="study-room">
+                    <h2 className="study-room-title">{roomInfoMap[room]}</h2>  {/* Use mapped room info */}
+                    <div className="study-room-divider"></div>
+                    <div className="forms-container">
+                        {forms.filter(form => form.studyRoom === room).map((form, index) => (
+                            <div key={index} className="form-item">
+                                <div className="form-label">Name:</div>
+                                <div className="form-data">{form.name}</div>
+                                <div className="form-label">Examination Date:</div>
+                                <div className="form-data">{form.examinationDate}</div>
+                            </div>
                         ))}
-                    </li>
-                ))}
-            </ul>
-        </>
-    )
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
 }
