@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {push, ref, set, get, remove} from 'firebase/database';
 import React, { useState, useEffect } from 'react';
 import { db } from '../config/firebaseConfig';
@@ -7,6 +7,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from 'next/navigation';
 import { auth } from '../config/firebaseConfig';
+import {findUserGroup} from "@/app/components/pool";
 
 
 export default function StudyRoomForm() {
@@ -15,6 +16,7 @@ export default function StudyRoomForm() {
   const router = useRouter();
   const [showNewFormPage, setShowNewFormPage] = useState(true)
   const [forms, setForms] = useState([]);
+  const [group, setGroup] = useState("");
   // State to keep track of form inputs
   const [formData, setFormData] = useState({
     name: '',
@@ -131,6 +133,11 @@ export default function StudyRoomForm() {
     // Update the local state to remove the application from the list
     setForms(forms.filter((form) => form.id !== applicationId));
   };
+
+  const getGroup = (form) => {
+    const g =  findUserGroup(forms, form.userId, form.studyRoom);
+    setGroup(g)
+  }
   
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -149,6 +156,7 @@ export default function StudyRoomForm() {
       return () => {
         unsubscribe();
       };
+
     }, []); // Empty dependency array means this effect only runs once on mount
 
     if (loading) {
@@ -180,6 +188,11 @@ export default function StudyRoomForm() {
 
                       <div className="detail-label">Eksamineringsdato:</div>
                       <div className="detail-info">{form.examinationDate}</div>
+
+                      <div className="detail-label">Group:</div>
+                      <div className="detail-info">{group}</div>
+                      <button onClick={() => getGroup(form)}>Get group</button>
+
                     </div>
                     <button
                         onClick={() => deleteApplication(form.id)}
