@@ -191,8 +191,8 @@ export default function StudyRoomForm() {
               ))}
             </div>
             <div style={{display: "flex", justifyContent: "center", width: "60%"}}>
-              <button className={"submit-button"} onClick={() => setShowNewFormPage(true)}>Send in a new application
-              </button>
+              <button className={"submit-button"} onClick={() => setShowNewFormPage(true)}
+              >Send inn ny søknad</button>
             </div>
           </div>
         </>
