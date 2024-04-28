@@ -17,7 +17,7 @@ export default function Admin() {
     const [usersSorted, setUsersSorted] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isSorted, setIsSorted] = useState(false);
-    const [selectedStudyRoom, setSelectedStudyRoom] = useState("Jafu");
+    const [selectedStudyRoom, setSelectedStudyRoom] = useState("");
 
     const sortUsers = (studyRoom) => {
         // Use the provided studyRoom or default to selectedStudyRoom from state
