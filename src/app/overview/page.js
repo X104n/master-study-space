@@ -43,9 +43,9 @@ export default function Overview() {
                         {filterAndSortUsers(forms.filter(form => form.studyRoom === room), 'examinationDate')
                             .map((form, index) => (
                                 <div key={index} className="form-item">
-                                    <div className="form-label">Name:</div>
+                                    <div className="form-label">Navn:</div>
                                     <div className="form-data">{form.name}</div>
-                                    <div className="form-label">Examination Date:</div>
+                                    <div className="form-label">Eksamineringsdato:</div>
                                     <div className="form-data">{form.examinationDate}</div>
                                 </div>
                             ))}
