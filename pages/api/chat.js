@@ -18,14 +18,14 @@ export default async function handler(req, res) {
     const options = {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+            'Authorization': `Bearer sk-proj-LqKnmwlhHbEc9ydbfSmfT3BlbkFJnxg64sUBbbr9NBzYZAWA`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
     };
 
     try {
-        const apiResponse = await fetch('https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat', options);
+        const apiResponse = await fetch('https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat/openai/v1/chat/completions', options);
         const data = await apiResponse.json(); // 'https://api.openai.com/v1/chat/completions'
 
         if (!apiResponse.ok) {
