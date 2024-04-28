@@ -5,7 +5,7 @@ import Image from "next/image"
 import {useEffect, useState} from "react";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "@/app/config/firebaseConfig";
-
+import { signOut } from "firebase/auth";
 
 export default function Navbar() {
     const router = useRouter();
@@ -111,7 +111,19 @@ export default function Navbar() {
                         <div className={"dropdown-menu"}>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
-                            <div><button className={"dropdown-menu-button"}>Logg ut</button></div>
+                            <button
+                                className={"dropdown-menu-button"}
+                                onClick={async () => {
+                                    try {
+                                        await signOut(auth);
+                                        router.push('/'); // Redirect to home page after sign out
+                                    } catch (error) {
+                                        console.error(`Error signing out: ${error}`);
+                                    }
+                                }}
+                            >
+                                Logg ut
+                            </button>
                         </div>
                     )}
                 </div>
