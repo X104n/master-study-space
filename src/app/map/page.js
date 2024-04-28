@@ -22,18 +22,25 @@ export default function Home() {
 
     return (
         <div style={{ display: 'flex' }}>
-            <div style={{ width: "200px", padding: '10px' }}>
+            <div className="nav-panel">
                 {rooms.map(room => (
-                    <button key={room.id} className="map-button" onClick={() => setCurrentRoom(room)}>
+                    <button
+                        key={room.id}
+                        className={`map-button ${currentRoom.id === room.id ? "active" : ""}`}
+                        onClick={() => setCurrentRoom(room)}
+                    >
                         {room.name}
                     </button>
                 ))}
                 <hr />
-                <button onClick={() => setShowDesks(!showDesks)}>
+                <button
+                    className={`map-button ${showDesks ? "active" : ""}`}
+                    onClick={() => setShowDesks(!showDesks)}
+                >
                     {showDesks ? 'Hide Desks' : 'Show Desks'}
                 </button>
             </div>
-            <div style={{ padding: '10px' }}>
+            <div style={{ padding: '10px'}}>
                 <h1>Lokasjon for Mastersalene</h1>
                 {currentRoom && <MapComponent room={currentRoom} showDesks={showDesks} />}
             </div>

@@ -1,15 +1,50 @@
+/* Navigation panel styles */
+.nav-panel {
+    margin-top: 95px;
+    margin-left: -50px;
+    width: 200px; /* Set a fixed width for the nav panel */
+    background: #1c1c1c; /* Dark background for depth */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    height: 35vh; /* Full height */
+    overflow-y: auto; /* Allows scrolling if many rooms */
+}
+
+/* Button Styles */
 .map-button {
-    background-color: #151210;
+    background-color: #252525;
     text-align: left;
-    width:100%;
-    color:white;
-    border: 0;
-    font-size:16px;
-    padding:5px;
+    width: 100%;
+    color: #ccc;
+    border: none;
+    font-size: 16px;
+    padding: 12px;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-left: 4px solid transparent; /* Style for active state indicator */
 }
 
 .map-button:hover {
-    background-color: #181818; /* Darken the button slightly on hover */
+    background-color: #2d2d2d;
+    color: #fff;
 }
 
+.map-button.active {
+    background-color: #444;
+    border-left-color: #4CAF50; /* Green indicator for active state */
+}
+
+/* Title Styling */
+.page-title {
+    font-size: 2rem;
+    color: #fff;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+
+/* Main content area */
+.main-content {
+    flex-grow: 1; /* Takes the remaining space */
+    padding: 20px;
+}
