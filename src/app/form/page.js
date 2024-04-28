@@ -1,5 +1,5 @@
 "use client"
-import { push, ref, set } from 'firebase/database';
+import { push, ref, set, get } from 'firebase/database';
 import React, { useState, useEffect } from 'react';
 import { db } from '../config/firebaseConfig';
 import "./temp.css"
@@ -13,6 +13,8 @@ export default function StudyRoomForm() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [showNewFormPage, setShowNewFormPage] = useState(true)
+  const [forms, setForms] = useState([]);
   // State to keep track of form inputs
   const [formData, setFormData] = useState({
     name: '',
@@ -98,12 +100,30 @@ export default function StudyRoomForm() {
       setIsSubmitting(false); // Reset submission status regardless of outcome
     }
   }
+
+  const getForms = async () => {
+    const formsRef = ref(db, 'forms'); // Reference to the forms node in Firebase
+    try {
+      const snapshot = await get(formsRef); // Fetch all the forms
+      if (snapshot.exists()) {
+        const forms = snapshot.val();
+        const userForms = Object.values(forms).filter(form => form.userId === user.uid); // Filter forms for the current user
+        setForms(userForms); // Set the filtered forms to the state
+        setShowNewFormPage(userForms.length === 0); // Show form if no applications exist
+      } else {
+        console.log('No data available');
+        }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  }
   
     useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (currentUser) {
-          // User is signed in
-          setUser(currentUser);
+          setUser(currentUser); // Set the current user
+          await getForms(currentUser);
+
           setLoading(false);
         } else {
           // No user is signed in
@@ -121,76 +141,81 @@ export default function StudyRoomForm() {
       return <div>Loading...</div>;
     }
 
+
   return (
       <>
         <h1>Skjema for søknad</h1>
-        <div className="study-room-form-container">
-          {submitError && <p className="error">{submitError}</p>}
-          <form onSubmit={handleSubmit} className="form">
-            <div className="input-group">
-              <label htmlFor="name">Navn:</label>
-              <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="Ola Norman"
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="studentNumber">Student Nr.:</label>
-              <input
-                  type="text"
-                  id="studentNumber"
-                  name="studentNumber"
-                  value={formData.studentNumber}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="abc123"
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="studyRoom">Ønsket master lesesal:</label>
-              <select
-                  id="studyRoom"
-                  name="studyRoom"
-                  value={formData.studyRoom}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-              >
-                <option value="Selmer">Selmer (2. etasje)</option>
-                <option value="Glassburet">Glassburet (3. etasje)</option>
-                <option value="Algoritme">Algoritme (3. etasje)</option>
-                <option value="Jafu">Jafu (4. etasje)</option>
-                <option value="Optimering">Optimering (4. etasje)</option>
-                <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
-              </select>
-            </div>
-            <div className="input-group">
-              <label htmlFor="examinationDate">Eksamineringsdato:</label>
-              <input
-                  type="text"
-                  id="examinationDate"
-                  name="examinationDate"
-                  value={formData.examinationDate}
-                  onChange={handleChange}
-                  required
-                  disabled={isSubmitting}
-                  placeholder="V2025"
-              />
-            </div>
-            <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
-              <button type="submit" className="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-              </button>
-            </div>
-          </form>
-        </div>
+        {forms.length > 0 && !showNewFormPage ? (
+            <div>{forms}</div>
+        ) : (
+          <div className="study-room-form-container">
+            {submitError && <p className="error">{submitError}</p>}
+            <form onSubmit={handleSubmit} className="form">
+              <div className="input-group">
+                <label htmlFor="name">Navn:</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                    placeholder="Ola Norman"
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="studentNumber">Student Nr.:</label>
+                <input
+                    type="text"
+                    id="studentNumber"
+                    name="studentNumber"
+                    value={formData.studentNumber}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                    placeholder="abc123"
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="studyRoom">Ønsket master lesesal:</label>
+                <select
+                    id="studyRoom"
+                    name="studyRoom"
+                    value={formData.studyRoom}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                >
+                  <option value="Selmer">Selmer (2. etasje)</option>
+                  <option value="Glassburet">Glassburet (3. etasje)</option>
+                  <option value="Algoritme">Algoritme (3. etasje)</option>
+                  <option value="Jafu">Jafu (4. etasje)</option>
+                  <option value="Optimering">Optimering (4. etasje)</option>
+                  <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
+                </select>
+              </div>
+              <div className="input-group">
+                <label htmlFor="examinationDate">Eksamineringsdato:</label>
+                <input
+                    type="text"
+                    id="examinationDate"
+                    name="examinationDate"
+                    value={formData.examinationDate}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                    placeholder="V2025"
+                />
+              </div>
+              <div style={{display:"flex", justifyContent:"center", width:"100%"}}>
+                <button type="submit" className="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
       </>
   );
 
