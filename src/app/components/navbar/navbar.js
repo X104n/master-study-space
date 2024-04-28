@@ -35,7 +35,6 @@ export default function Navbar() {
                         setShowAdmin(true);
                     }
                 }
-
                 setLoading(false);
             } else {
                 // No user is signed in
@@ -110,8 +109,6 @@ export default function Navbar() {
 
                 <div className={"items-center profile"}>
                     {/*TODO: Add light/dark mode button*/}
-                    {/*TODO: Make this only a login button if nobody is logged in*/}
-                    {/*TODO: Make it so that when the dropdown menu is down, if you click anywhere that isn't the menu it closes*/}
                     <button onClick={toggleDropdown}>
                         <svg stroke="currentColor" fill="none" strokeWidth="0" viewBox="0 0 15 15" className="profile-icon"
                              height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
