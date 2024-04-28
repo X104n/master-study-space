@@ -1,3 +1,6 @@
+// This line needs to be included for the cloudflare deployment to work.
+// If we deploy using Vercel, this line should be removed.
+export const runtime = 'edge';
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
