@@ -50,7 +50,7 @@ const rooms = [
         lng: 5.331309, 
         lat: 60.381257, 
         zLevel: 3, 
-        zoom: 21.5,
+        zoom: 20.8,
         desks: [ 
         { id: 1, name: "Desk A1", lng: 5.331292197110059, lat: 60.38129713838666, status: 'available' },
         { id: 2, name: "Desk A2", lng: 5.3313313964430336, lat: 60.381286881923245, status: 'booked' },
@@ -74,7 +74,7 @@ const rooms = [
         lng: 5.330720,
         lat: 60.381403,
         zLevel: 4,
-        zoom: 21.5,
+        zoom: 21,
         desks: [
             { id: 1, name: "Desk A1", lng: 5.3307543103656485, lat: 60.38138219693977, status: "available" },
             { id: 2, name: "Desk A2", lng: 5.3307763664885215, lat: 60.38140110279028, status: "booked" },
@@ -110,7 +110,7 @@ const rooms = [
         lng: 5.330693,
         lat: 60.381404,
         zLevel: 6,
-        zoom: 21.5,
+        zoom: 21,
         desks: [
            { id: 1, name: "Desk A1", lng: 5.330691493474973, lat: 60.38136628148442, status: 'available' },
            { id: 2, name: "Desk A2", lng: 5.330716278361422, lat: 60.38136968406815, status: 'booked' },
@@ -140,31 +140,32 @@ const rooms = [
 export default function Home() {
     const [currentRoom, setCurrentRoom] = useState(rooms[0]);
     const [showDesks, setShowDesks] = useState(false);
-
+  
     return (
-        <div style={{ display: 'flex' }}>
-            <div className="nav-panel">
-                {rooms.map(room => (
-                    <button
-                        key={room.id}
-                        className={`map-button ${currentRoom.id === room.id ? "active" : ""}`}
-                        onClick={() => setCurrentRoom(room)}
-                    >
-                        {room.name}
-                    </button>
-                ))}
-                <hr />
-                <button
-                    className={`map-button ${showDesks ? "active" : ""}`}
-                    onClick={() => setShowDesks(!showDesks)}
-                >
-                    {showDesks ? 'Hide Desks' : 'Show Desks'}
-                </button>
-            </div>
-            <div style={{ padding: '10px'}}>
-                <h1>Lokasjon for Mastersalene</h1>
-                <MapComponent room={currentRoom} showDesks={showDesks} />
-            </div>
+      <div className="container">
+        <div className="nav-panel">
+          {rooms.map(room => (
+            <button
+              key={room.id}
+              className={`map-button ${currentRoom.id === room.id ? "active" : ""}`}
+              onClick={() => setCurrentRoom(room)}
+            >
+              {room.name}
+            </button>
+          ))}
+          <hr />
+          <button
+            className={`map-button ${showDesks ? "active" : ""}`}
+            onClick={() => setShowDesks(!showDesks)}
+          >
+            {showDesks ? 'Hide Desks' : 'Show Desks'}
+          </button>
         </div>
+        <div className="content">
+          <h1>Lokasjon for Mastersalene</h1>
+          <MapComponent room={currentRoom} showDesks={showDesks} />
+        </div>
+      </div>
     );
-}
+  }
+  

@@ -65,7 +65,8 @@ export default function Navbar() {
                         </ul>
                     </div>
                     <div className={"items-center profile"}>
-                        <button onClick={() => router.push('/login')}>Logg inn</button>
+                    <button className="login-button unique-login-style" onClick={() => router.push('/login')}>Logg inn</button>
+
                     </div>
                 </div>
             </div>

@@ -78,6 +78,25 @@
 .navbar button:hover {
     background-color: #181818; /* Darken the button slightly on hover */
 }
+/* Specific login button styles without hover effect */
+.login-button.unique-login-style {
+    background-color: #fed879; /* Yellow background */
+    color: black; /* Set font color to black */
+    border: 2px solid #fed879; /* Matching yellow border for a solid look */
+    padding: 10px 20px; /* Padding to make the button larger */
+    font-size: 16px;
+    font-family: sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Remove hover effect for this specific button */
+.login-button.unique-login-style:hover {
+    background-color: #fed879; /* Stay the same yellow color */
+    color: black; /* Text color remains black */
+    border-color: #fed879; /* Border remains the same */
+}
+
 
 .profile {
     position: relative;
