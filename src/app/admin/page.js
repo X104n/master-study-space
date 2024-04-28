@@ -6,6 +6,8 @@ import {useRouter} from 'next/navigation';
 import {ref, get, remove} from "firebase/database";
 import {getDoc, doc, deleteDoc} from "firebase/firestore";
 import {filterAndSortUsers} from '../components/sort';
+import "./temp.css"
+
 
 export default function Admin() {
     const [user, setUser] = useState(null);
@@ -17,10 +19,14 @@ export default function Admin() {
     const [isSorted, setIsSorted] = useState(false);
     const [selectedStudyRoom, setSelectedStudyRoom] = useState("Jafu");
 
-    const sortUsers = () => {
-        const sorted = filterAndSortUsers([...users], 'examinationDate', selectedStudyRoom);
+    const sortUsers = (studyRoom) => {
+        // Use the provided studyRoom or default to selectedStudyRoom from state
+        const room = studyRoom || selectedStudyRoom;
+
+        setSelectedUser(null);  // Resetting the selected user
+        const sorted = filterAndSortUsers([...users], 'examinationDate', room);
         setUsersSorted(sorted);
-        setIsSorted(true);
+        setIsSorted(sorted.length > 0);
     };
 
     const selectRandomUser = () => {
@@ -98,44 +104,56 @@ export default function Admin() {
 
     return (
         <>
-            <h1>Admin</h1>
-            <select
-                value={selectedStudyRoom}
-                onChange={e => setSelectedStudyRoom(e.target.value)}
-                style={{marginBottom: '10px'}}
-            >
-                <option value="Jafu">Jafu</option>
-                <option value="Sikkerhet">Sikkerhet</option>
-                <option value="Optimering">Optimering</option>
-                <option value="Selmer">Selmer</option>
-                <option value="Glassburet">Glassburet</option>
-                <option value="Maskinlæring">Maskinlæring</option>
-            </select>
-            <button onClick={sortUsers}>Sort Users in Selected Study Room</button>
-            {isSorted && (
-                <button onClick={selectRandomUser}>Select Random User from Earliest Group</button>
-            )}
-            <div>
-                {selectedUser ? (
+            <div className={"list-container"}>
+                <div className="form">
+                    <select
+                        value={selectedStudyRoom}
+                        onChange={e => {
+                            setSelectedStudyRoom(e.target.value);
+                            sortUsers(e.target.value);  // Call sortUsers function after setting the new room
+                        }}
+                        className={"input-group"}
+                    >
+                        <option value="" disabled>Velg et rom</option>
+                        <option value="Selmer">Selmer (2. etasje)</option>
+                        <option value="Glassburet">Glassburet (3. etasje)</option>
+                        <option value="Algoritme">Algoritme (3. etasje)</option>
+                        <option value="Jafu">Jafu (4. etasje)</option>
+                        <option value="Optimering">Optimering (4. etasje)</option>
+                        <option value="Maskinlæring">Maskinlæring (6. etasje)</option>
+                    </select>
+                    {/*<div style={{display: "flex", justifyContent: "center"}}>*/}
+                        {/*<button className={"cool-button"} onClick={sortUsers}>Sort by examination date</button>*/}
+                        {isSorted && (
+                            <button className={"cool-button"} onClick={selectRandomUser}>Select random user from
+                                earliest group</button>
+                        )}
+                    {/*</div>*/}
                     <div>
-                        <strong>Selected User:</strong> {selectedUser.name} - {selectedUser.examinationDate}
-                        <button onClick={() => deleteUser(selectedUser.id)}>Delete</button>
+                        {selectedUser && (
+                            <div className="application-item">
+                                <div className="application-details-grid">
+                                <div className="detail-label">Selected User:</div>
+                                    <div className="detail-info">{selectedUser.examinationDate} - {selectedUser.name}</div>
+                                    <button className={"delete-button"} onClick={() => deleteUser(selectedUser.id)}>Delete</button>
+                                </div>
+                            </div>
+                        )}
+                        {isSorted && usersSorted.length > 0 && (
+                            usersSorted.map((user, index) => (
+                                <div key={user.id || index} className="application-item">
+                                    <div className="application-details-grid">
+                                        <div className="detail-label">Date:</div>
+                                        <div className="detail-info">{user.examinationDate} - {user.name}</div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
-                ) : null}
-                {usersSorted.length === 0 ? (
-                    users.map((user, index) => (
-                        <div key={user.id || index}>
-                            {user.examinationDate} - {user.name}
-                        </div>
-                    ))
-                ) : (
-                    usersSorted.map((user, index) => (
-                        <div key={user.id || index}>
-                            {user.examinationDate} - {user.name}
-                        </div>
-                    ))
-                )}
+                </div>
             </div>
         </>
+
+
     );
 }
