@@ -15,7 +15,7 @@ export default function Home() {
       </p>
       <h3>Slik søker du</h3>
       <p>
-        Å søke om plass i masterlesesal er enkelt. Velg mellom våre spesialiserte saler – Algoritme, Jafu, og Optimering – basert på dine studiebehov og interesser. Hver sal har sin unike atmosfære og ressurser tilpasset forskjellige studieområder.
+        Å søke om plass i masterlesesal er enkelt. Velg mellom våre spesialiserte saler – Selmer, Glassburet, Algoritme, Jafu, Optimering og Maskinlæring – basert på dine studiebehov og interesser. Hver sal har sin unike atmosfære og ressurser tilpasset forskjellige studieområder.
       </p>
       <p>
         For å søke, fyll ut søknadsskjemaet hvor du angir ønsket lesesal. Husk å inkludere din studentinformasjon og noen få ord om hvorfor du velger den spesifikke lesesalen. 
