@@ -2,19 +2,16 @@
 import React, { useState } from 'react';
 import './chatbot.css';
 
-function Chatbot() {
-  // handles state within functional components
+export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  // hadles sending messages
   const sendMessage = async () => {
-    if (!input.trim()) return; 
+    if (!input.trim()) return;
     const userMessage = { text: input, sender: 'user' };
-    setMessages(prevMessages => [...prevMessages, userMessage]); // updates message state
+    setMessages(prevMessages => [...prevMessages, userMessage]);
 
-    // sends the mesg to the backend API
     const options = {
       method: 'POST',
       headers: {
@@ -36,7 +33,7 @@ function Chatbot() {
     }
 
     // clear the input after sending
-    setInput(''); 
+    setInput('');
   };
 
    // detect key to send a message
@@ -77,5 +74,3 @@ function Chatbot() {
     </div>
   );
 }
-
-export default Chatbot;
