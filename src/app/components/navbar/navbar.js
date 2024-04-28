@@ -70,9 +70,18 @@ export default function Navbar() {
                             </a>
                         </div>
                         <ul>
-                            <li><button onClick={() => router.push('/')}>Hjem</button></li>
-                            <li><button onClick={() => router.push('/map')}>Kart</button></li>
-                            <li><button onClick={() => router.push('/form')}>Søknad</button></li>
+                            <li>
+                                <button onClick={() => router.push('/')}>Hjem</button>
+                            </li>
+                            <li>
+                                <button onClick={() => router.push('/map')}>Kart</button>
+                            </li>
+                            <li>
+                                <button onClick={() => router.push('/form')}>Søknad</button>
+                            </li>
+                            <li>
+                                <button onClick={() => router.push('/overview')}>Alle søknader</button>
+                            </li>
                         </ul>
                     </div>
                     <div className={"items-center profile"}>
@@ -100,9 +109,18 @@ export default function Navbar() {
                         </a>
                     </div>
                     <ul>
-                        <li><button onClick={() => router.push('/')}>Hjem</button></li>
-                        <li><button onClick={() => router.push('/map')}>Kart</button></li>
-                        <li><button onClick={() => router.push('/form')}>Søknad</button></li>
+                        <li>
+                            <button onClick={() => router.push('/')}>Hjem</button>
+                        </li>
+                        <li>
+                            <button onClick={() => router.push('/map')}>Kart</button>
+                        </li>
+                        <li>
+                            <button onClick={() => router.push('/form')}>Søknad</button>
+                        </li>
+                        <li>
+                            <button onClick={() => router.push('/overview')}>Alle søknader</button>
+                        </li>
                     </ul>
                 </div>
 
