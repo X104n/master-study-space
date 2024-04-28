@@ -2,42 +2,38 @@
 import "./temp.css"
 import { useRouter } from 'next/navigation';
 import Image from "next/image"
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {onAuthStateChanged} from "firebase/auth";
-import {auth} from "@/app/config/firebaseConfig";
+import {auth, dbs} from "@/app/config/firebaseConfig";
 import { signOut } from "firebase/auth";
+import {doc, getDoc} from "firebase/firestore";
 
 export default function Navbar() {
     const router = useRouter();
     const [showDropdown, setShowDropdown] = useState(false)
+    const [showAdmin, setShowAdmin] = useState(false)
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown)
+    }
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const dropdownRef = useRef(null)
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
-
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setShowDropdown(false);
-        }
-    };
-
     useEffect(() => {
-        // Add when the component mounts
-        document.addEventListener("mousedown", handleClickOutside);
-        // Return function to be called when unmounted
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 // User is signed in
                 setUser(currentUser);
+
+                const docRef = doc(dbs, "users", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+                    if (userData.isAdmin) {
+                        setShowAdmin(true);
+                    }
+                }
                 setLoading(false);
             } else {
                 // No user is signed in
@@ -112,8 +108,6 @@ export default function Navbar() {
 
                 <div className={"items-center profile"}>
                     {/*TODO: Add light/dark mode button*/}
-                    {/*TODO: Make this only a login button if nobody is logged in*/}
-                    {/*TODO: Make it so that when the dropdown menu is down, if you click anywhere that isn't the menu it closes*/}
                     <button onClick={toggleDropdown}>
                         <svg stroke="currentColor" fill="none" strokeWidth="0" viewBox="0 0 15 15" className="profile-icon"
                              height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -123,9 +117,12 @@ export default function Navbar() {
                         </svg>
                     </button>
                     {showDropdown && (
-                        <div className={"dropdown-menu"} ref={dropdownRef}>
+                        <div className={"dropdown-menu"}>
                             <div><button className={"dropdown-menu-button"} onClick={() => router.push('/bruker')}>Min profil</button></div>
-                            <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
+                            {showAdmin ? (
+                                <div><button className={"dropdown-menu-button"} onClick={() => router.push('/admin')}>Admin</button></div>
+                            ) : null}
+
                             <button
                                 className={"dropdown-menu-button"}
                                 onClick={async () => {
