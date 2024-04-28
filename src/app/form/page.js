@@ -149,8 +149,9 @@ export default function StudyRoomForm() {
 
   return (
       <>
-        <h1>Søknader</h1>
         {!showNewFormPage ? (
+        <>
+          <h1>Dine Søknader</h1>
           <div className={"study-room-form-container"}>
             <div className={"form"}>
             {forms.map((form, index) => (
@@ -167,9 +168,11 @@ export default function StudyRoomForm() {
               </div>
             </div>
           </div>
+        </>
 
         ) : (
-
+        <>
+          <h1>Send inn ny søknad</h1>
           <div className="study-room-form-container">
             {submitError && <p className="error">{submitError}</p>}
             <form onSubmit={handleSubmit} className="form">
@@ -242,6 +245,7 @@ export default function StudyRoomForm() {
               </div>
             </form>
           </div>
+          </>
           )}
       </>
   );
