@@ -1,39 +1,36 @@
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { message } = req.body;  // extracts message from the request body  
-    // payload for OpenAI API request
-    const payload = {
-      model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: message}], 
-      max_tokens: 100
-    };
-    // request options for the OpenAI API
-    const options = {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer sk-proj-tQr8Y5ahffVbYMgvK5vcT3BlbkFJLyN6O1uDTuh0x7SY4psW`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    };
+export const config = { runtime: 'edge' };
 
+export default async function handler(request) {
+  if (request.method === 'POST') {
     try {
-      // fetching the OpenAI API
-      const response = await fetch('https://api.openai.com/v1/chat/completions', options);
-      const data = await response.json();
+      const data = await request.json();
+      const { message } = data;
 
-      if (!response.ok) {
-        throw new Error(data.error.message);
+      const payload = {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: message }],
+        max_tokens: 100
+      };
+
+      const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const responseData = await apiResponse.json();
+      if (!apiResponse.ok) {
+        return new Response(JSON.stringify({ error: responseData.error.message }), { status: apiResponse.status });
       }
 
-      // send the response back to the client
-      res.status(200).json({ message: data.choices[0].message.content });
+      return new Response(JSON.stringify({ message: responseData.choices[0].message.content }), { status: 200 });
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ error: error.message });
+      return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
   }
 }
-export const config = { runtime: 'edge' };
