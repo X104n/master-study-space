@@ -1,4 +1,4 @@
-.study-room-form-container {
+.list-container {
   padding-top: 20px;
   display: flex;
   justify-content: center;
@@ -27,15 +27,15 @@
   align-items: left;
 }
 
-.input-group label {
+.list-container label {
   margin: 10px;
   font-size: 17px;
   flex: 1; /* Adjusts the width of the label to take 1 part of the flex container */
   text-align: left;
 }
 
-.input-group input,
-.input-group select {
+.list-container input,
+.list-container select {
   flex: 2; /* Adjusts the width of the input/select to take 2 parts of the flex container */
   padding: 8px;
   border: 1px solid #4d4d4d;
@@ -45,30 +45,27 @@
 }
 
 
-.submit-button {
+.cool-button {
   padding: 10px;
   background-color: #212121;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 40px;
-  margin-bottom: 30px;
-  width: 80%;
-  font-size: 16px;
+  width: 50%;
+  margin: 10px;
+  font-size: 15px;
 }
 
-.submit-button:hover {
+.cool-button:hover {
   background-color: #292929;
 }
 
 .application-details-grid {
   display: grid;
-  grid-template-columns: auto 1fr; /* First column for labels, second for info */
-  gap: 10px;
+  grid-template-columns: auto 1fr; /* Creates two columns: one for labels and one for info */
+  gap: 10px; /* Space between rows and columns */
   align-items: center; /* Align items vertically */
-  width: 100%;
-  padding: 8px;
 }
 
 .detail-label {
@@ -85,15 +82,13 @@
   background-color: #202020;
   padding: 10px;
   border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 10px;
-  gap: 20px; /* Space between the grid and the button */
+  display: flex;
+  flex-direction: column;
 }
 
 .delete-button {
-  padding: 8px 16px; /* Adjust padding to make the button more prominent */
+  padding: 8px 16px;
   background-color: #d82a25;
   font-size: 16px;
   color: white;
@@ -101,7 +96,9 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-right: 15px;
+  width: 100px;
+  align-self: flex-end; /* Align the button to the right (flex-end of the column) */
+  margin-top: 10px; /* Adds some space above the button */
 }
 
 .delete-button:hover {

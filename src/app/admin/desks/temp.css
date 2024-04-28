@@ -1,0 +1,67 @@
+.desk-container {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.location-details {
+    background-color: #181818;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.location-details h2 {
+    margin-top: -15px;       /* Reset default margin */
+    padding-top: 10px;   /* Add custom padding if needed */
+    /* Other styles for h2 */
+}
+
+.desks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    align-items: center;
+}
+.desk-item {
+    background-color: #202020;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.desk-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #cccccc;
+}
+
+.detail-info {
+    color: #ffffff;
+}
+
+.toggle-button {
+    padding: 8px 16px;
+    background-color: #fed879;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.toggle-button:hover {
+    background-color: #fed879;
+}

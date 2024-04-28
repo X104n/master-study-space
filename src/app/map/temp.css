@@ -1,0 +1,68 @@
+/* Overall layout */
+.container {
+    display: flex;
+    align-items: flex-start; /* Aligns children to the top */
+
+  }
+
+  /* Navigation panel styles */
+  .nav-panel {
+    flex: 0 0 200px; /* flex-grow, flex-shrink, flex-basis */
+    background: #1c1c1c;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    margin-top: 85px;
+    margin-right: 5px;
+    max-height: 100vh; /* Adjust to full height of the viewport */
+
+  }
+
+  /* Main content area */
+  .main-content {
+    flex-grow: 1; /* Takes the remaining space */
+    padding: 20px;
+    max-width: 80%; /* Prevent the map from getting too large */
+}
+
+  /* Button Styles */
+  .map-button {
+    background-color: #252525;
+    text-align: left;
+    width: 100%;
+    color: #ccc;
+    border: none;
+    font-size: 16px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border-left: 4px solid transparent;
+  }
+
+  .map-button:hover {
+    background-color: #2d2d2d;
+    color: #fff;
+  }
+
+  .map-button.active {
+    background-color: #444;
+    border-left-color: #fed879;
+  }
+
+  /* Other styles remain the same */
+  
+
+/* Title Styling */
+.page-title {
+    font-size: 2rem;
+    color: #fff;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+
+/* Main content area */
+.main-content {
+    flex-grow: 1; /* Takes the remaining space */
+    padding: 20px;
+}

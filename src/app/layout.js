@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 // import "./globals.css";
-import Navbar from "./navbar/navbar";
+import Navbar from "@/app/components/navbar/navbar";
+import Chatbot from "@/app/components/chatbot/Chatbot"; 
+import "./temp.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,10 +16,16 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* Ensure to include the <head> tags for proper document structure */}
+        <title>Master Lesesal</title>
       </head>
-      <body className={inter.className}>
+      <body className={inter.className + "items-center" }>
         <Navbar /> {/* This line includes the Navbar */}
-        {children}
+        <div className={"items-center"}>
+            <div className={"page-content "}>
+                {children}
+            </div>
+        </div>
+        <Chatbot /> 
       </body>
     </html>
   );
