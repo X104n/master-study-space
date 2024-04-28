@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
@@ -31,5 +33,3 @@ async function fetchOpenAI(message) {
   const data = await response.json();
   return data.choices[0].text;
 }
-//${process.env.OPENAI_API_KEY}`
-// 'https://gateway.ai.cloudflare.com/v1/01ac260682ae1dd8a8fe406ff14e5bb4/openaichat/openai/v1/chat/completions
