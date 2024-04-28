@@ -5,7 +5,7 @@ import {auth, dbs, db} from '../config/firebaseConfig';
 import {useRouter} from 'next/navigation';
 import {ref, get, remove} from "firebase/database";
 import {getDoc, doc, deleteDoc} from "firebase/firestore";
-import {filterAndSortUsers} from '../components/sort'; // Adjust the path as necessary
+import {filterAndSortUsers} from '../components/sort';
 
 export default function Admin() {
     const [user, setUser] = useState(null);
@@ -15,7 +15,7 @@ export default function Admin() {
     const [usersSorted, setUsersSorted] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isSorted, setIsSorted] = useState(false);
-    const [selectedStudyRoom, setSelectedStudyRoom] = useState("Jafu"); // Default to 'Jafu'
+    const [selectedStudyRoom, setSelectedStudyRoom] = useState("Jafu");
 
     const sortUsers = () => {
         const sorted = filterAndSortUsers([...users], 'examinationDate', selectedStudyRoom);
@@ -54,17 +54,15 @@ export default function Admin() {
         if (!userId) return;
 
         try {
-            // Ensure the path is correctly pointing to the specific user node
             const userRef = ref(db, `forms/${userId}`);
             await remove(userRef);
             console.log("Document successfully deleted!");
-            setSelectedUser(null);  // Clear the selected user from state
-            populateUsers();  // Refresh the users list to reflect the deletion
+            setSelectedUser(null);
+            await populateUsers();
         } catch (error) {
             console.error("Error removing document:", error);
         }
     };
-
 
 
     useEffect(() => {
@@ -109,6 +107,9 @@ export default function Admin() {
                 <option value="Jafu">Jafu</option>
                 <option value="Sikkerhet">Sikkerhet</option>
                 <option value="Optimering">Optimering</option>
+                <option value="Selmer">Selmer</option>
+                <option value="Glassburet">Glassburet</option>
+                <option value="Maskinlæring">Maskinlæring</option>
             </select>
             <button onClick={sortUsers}>Sort Users in Selected Study Room</button>
             {isSorted && (
@@ -119,7 +120,6 @@ export default function Admin() {
                     <div>
                         <strong>Selected User:</strong> {selectedUser.name} - {selectedUser.examinationDate}
                         <button onClick={() => deleteUser(selectedUser.id)}>Delete</button>
-                        <button onClick={() => console.log(selectedUser.id)}>Clear</button>
                     </div>
                 ) : null}
                 {usersSorted.length === 0 ? (
